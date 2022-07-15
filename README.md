@@ -19,3 +19,7 @@ For example, you can create a lock file for developing LensKit:
 Or you can download some testing data:
 
     lkbuild fetch-data -d ml-20m
+
+You can also install into a Python environment with:
+
+    lenskit-build-helpers

@@ -1,0 +1,24 @@
+package:
+  name: lenskit-build-helpers
+  version: {{ GIT_DESCRIBE_TAG }}
+
+source:
+  path: .  
+
+build:
+  number: {{ GIT_DESCRIBE_NUMBER }}
+  string: {{ GIT_BUILD_STR }}
+  noarch: python
+
+requirements:
+  build:
+  - python >=3.8
+  - flit >=3.2,<4
+  run:
+  - python >=.8
+  - flit >=3.2,<4
+  - requests ==2.*
+  - invoke ==1.*
+  - pip
+  - conda-lock ==1.*
+  - mamba
