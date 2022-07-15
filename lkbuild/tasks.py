@@ -21,7 +21,8 @@ BIBTEX_FILE = Path('docs/lenskit.bib')
 
 
 @task(iterable=['extras', 'mixins'])
-def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None, env_file=False, gh_set=False):
+def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None, env_file=False,
+             gh_set_output=False):
     "Create a development lockfile"
     plat = env.conda_platform()
 
