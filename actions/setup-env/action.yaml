@@ -27,7 +27,7 @@ runs:
     - name: Backup bashrc
       shell: bash
       run: |
-        cp $HOME/.bashrc $HOME/.bashrc.premm
+        cp $HOME/.bash_profile $HOME/.bash_profile.premm
 
     - name: 👢 Create bootstrap environment
       uses: mamba-org/provision-with-micromamba@main
@@ -46,7 +46,7 @@ runs:
     - name: Restore bashrc
       shell: bash
       run: |
-        mv $HOME/.bashrc.premm $HOME/.bashrc
+        mv $HOME/.bash_profile.premm $HOME/.bash_profile
 
     - name: ⚒ Initialize Conda
       id: conda-init
