@@ -39,9 +39,9 @@ runs:
         PYVER: ${{ inputs.python-version }}
 
     - name: Reverse bootstrap init init
-      shell: bash -l {0}
+      shell: bash
       run: |
-        mamba shell init --reverse bash
+        "$MAMBA_EXE" shell init --reverse bash
 
     - name: ⚒ Initialize Conda
       id: conda-init
