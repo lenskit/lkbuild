@@ -16,21 +16,11 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: 🔎 Add Conda binaries to environment path
-      id: path
-      shell: bash
-      run: |
-        if [ ${{runner.os}} = Windows ]; then
-          echo "$CONDA\\condabin" >>$GITHUB_PATH
-        else
-          echo "$CONDA/condabin" >>$GITHUB_PATH
-        fi
-
-    - name: 👢 Create bootsrap environment
-      id: bootstrap
-      shell: bash
-      run: |
-        conda env create -n lkboot -f https://raw.githubusercontent.com/lenskit/lkbuild/main/boot-env.yml
+    - name: 👢 Create bootstrap environment
+      uses: mamba-org/provision-with-micromamba@main
+      with:
+        environment-name: lkboot
+        environment-file: ${{ github.action_path }}/../../boot-env.yml
 
     - name: 🔒 Prepare Conda environment spec
       id: conda-lock
