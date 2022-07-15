@@ -15,7 +15,7 @@ requirements:
   - python >=3.8
   - flit >=3.2,<4
   run:
-  - python >=.8
+  - python >=3.8
   - flit >=3.2,<4
   - requests ==2.*
   - invoke ==1.*
