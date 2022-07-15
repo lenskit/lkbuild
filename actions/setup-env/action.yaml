@@ -19,6 +19,7 @@ runs:
     - name: Copy bootstrap environment
       shell: bash
       run: |
+        ls "$ACTPATH/../.."
         cp -v "$ACTPATH/../../boot-env.yml" boot-env.yml
       env:
         ACTPATH: ${{ github.action_path }}
