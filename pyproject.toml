@@ -1,0 +1,23 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "lkbuild"
+authors = [
+    {name = "Michael Ekstrand", email = "michaelekstrand@boisestate.edu"}
+]
+readme = "README.md"
+license = { file = "LICENSE.md" }
+requires-python = ">= 3.8"
+dynamic = ['version', 'description']
+dependencies = [
+    "flit >=3.2,<4",
+    "requests ==2.*",
+    "invoke ==1.*",
+    "pip",
+    "conda-lock ==1.*",
+]
+
+[project.scripts]
+lkbuild = "lkbuild:lkbuild_main"

@@ -2,9 +2,10 @@
 Support tasks shared across LensKit packages.
 """
 
+from os import fspath
 import sys
 from pathlib import Path
-from invoke import task
+from invoke import task, Program, Collection
 from . import env
 import yaml
 import requests
@@ -20,7 +21,7 @@ BIBTEX_FILE = Path('docs/lenskit.bib')
 
 
 @task(iterable=['extras', 'mixins'])
-def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None, env_file=False):
+def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None, env_file=False, gh_set=False):
     "Create a development lockfile"
     plat = env.conda_platform()
 
@@ -30,15 +31,21 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
         plat_opt = f'-p {platform}'
     else:
         plat_opt = f'-p {plat}'
+    
+    spec_dir = Path(__file__).parent / 'specs'
+    if not spec_dir.exists():
+        raise RuntimeError('spec dir not found, is lkbuild installed correctly?')
 
     cmd = f'conda-lock lock --mamba {plat_opt} -k explicit --dev-dependencies -f pyproject.toml'
     if env_file:
         cmd += ' -k env'
 
     if version:
-        cmd += f' -f lkbuild/python-{version}-spec.yml'
+        sf = spec_dir / f'python-{version}-spec.yml'
+        cmd += ' -f ' + fspath(sf)
     if blas:
-        cmd += f' -f lkbuild/{blas}-spec.yml'
+        sf = spec_dir / f'{blas}-spec.yml'
+        cmd += ' -f ' + fspath(sf)
     for m in mixins:
         cmd += f' -f {m}'
     for e in extras:
@@ -46,6 +53,9 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
 
     print('running', cmd, file=sys.stderr)
     c.run(cmd)
+
+    if gh_set:
+        print(f'::set-output name=environment-file::conda-{plat}.lock')
 
 
 @task(iterable=['extras'])
@@ -58,10 +68,15 @@ def env_file(c, platform=None, extras=None, version=None, blas=None, dev_deps=Tr
         platform = env.conda_platform()
 
     files = [Path('pyproject.toml')]
+    
+    spec_dir = Path(__file__).parent / 'specs'
+    if not spec_dir.exists():
+        raise RuntimeError('spec dir not found, is lkbuild installed correctly?')
+    
     if version:
-        files.append(Path(f'lkbuild/python-{version}-spec.yml'))
+        files.append(spec_dir / f'python-{version}-spec.yml')
     if blas:
-        files.append(Path(f'lkbuild/{blas}-spec.yml'))
+        files.append(spec_dir / f'{blas}-spec.yml')
 
     lock = parse_source_files(files, platform, dev_deps, extras)
     lock = aggregate_lock_specs(lock)
@@ -103,5 +118,9 @@ def fetch_data(c, data='ml-100k', data_dir=DATA_DIR):
     "Fetch a data set."
     from . import datasets
 
+    data_dir = Path(data_dir)
+    data_dir.mkdir(exist_ok=True, parents=True)
     if data.startswith('ml-'):
         datasets.fetch_ml(DATA_DIR, data)
+    else:
+        raise ValueError(f'unknown data set {data}')

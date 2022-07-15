@@ -1,11 +1,14 @@
+# bootstrap Conda environment file that installs this + deps
 name: lkboot
 channels:
 - conda-forge
 dependencies:
 - python>=3.8
 - flit=3
-- invoke=1
 - requests=2
+- invoke=1
 - pip
 - conda-lock=1
 - mamba
+- pip:
+  - git+https://github.com/lenskit/lkbuild.git
