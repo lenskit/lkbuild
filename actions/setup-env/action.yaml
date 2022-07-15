@@ -16,11 +16,18 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Copy bootstrap environment
+      shell: bash
+      run: |
+        cp -v "$ACTPATH/../../boot-env.yml" boot-env.yml
+      env:
+        ACTPATH: ${{ github.action_path }}
+
     - name: 👢 Create bootstrap environment
       uses: mamba-org/provision-with-micromamba@main
       with:
         environment-name: lkboot
-        environment-file: ${{ github.action_path }}/boot-env.yml
+        environment-file: boot-env.yml
 
     - name: 🔒 Prepare Conda environment spec
       id: conda-lock
