@@ -6,3 +6,16 @@ To set up a Conda environment that contains the utilities needed to bootstrap a 
 development environment:
 
     conda env create -n lkboot -f https://raw.githubusercontent.com/lenskit/lkbuild/main/boot-env.yml
+
+Then you can run the lkbuild utilities:
+
+    conda activate lkboot
+    lkbuild --help
+
+For example, you can create a lock file for developing LensKit:
+
+    lkbuild dev-lock -v 3.9 -b mkl
+
+Or you can download some testing data:
+
+    lkbuild fetch-data -d ml-20m
