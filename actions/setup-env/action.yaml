@@ -16,6 +16,9 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: debug
+      shell: bash
+      run: ls ${{ github.action_pat }}/../..
     - name: 👢 Create bootstrap environment
       uses: mamba-org/provision-with-micromamba@main
       with:
