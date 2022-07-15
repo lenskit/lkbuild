@@ -20,7 +20,7 @@ runs:
       uses: mamba-org/provision-with-micromamba@main
       with:
         environment-name: lkboot
-        environment-file: ${{ github.action_path }}/../../boot-env.yml
+        environment-file: ${{ github.action_path }}/boot-env.yml
 
     - name: 🔒 Prepare Conda environment spec
       id: conda-lock
