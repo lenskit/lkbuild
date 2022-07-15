@@ -59,6 +59,7 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
     c.run(cmd)
 
     if gh_set_output:
+        print(f'::set-output name=platform::{plat}')
         if env_file:
             fn = f'conda-{plat}.lock.yml'
         else:
