@@ -18,7 +18,8 @@ runs:
   steps:
     - name: debug
       shell: bash
-      run: ls ${{ github.action_pat }}/../..
+      run: ls ${{ github.action_path }}/../..
+
     - name: 👢 Create bootstrap environment
       uses: mamba-org/provision-with-micromamba@main
       with:
