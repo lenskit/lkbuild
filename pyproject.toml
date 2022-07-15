@@ -22,5 +22,5 @@ dependencies = [
 [project.scripts]
 lkbuild = "lkbuild:lkbuild_main"
 
-[tools.flit.module]
+[tool.flit.module]
 name = "lkbuild"
