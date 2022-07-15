@@ -24,6 +24,11 @@ runs:
       env:
         ACTPATH: ${{ github.action_path }}
 
+    - name: Backup bashrc
+      shell: bash
+      run: |
+        cp $HOME/.bashrc $HOME/.bashrc.premm
+
     - name: 👢 Create bootstrap environment
       uses: mamba-org/provision-with-micromamba@main
       with:
@@ -38,10 +43,10 @@ runs:
       env:
         PYVER: ${{ inputs.python-version }}
 
-    - name: Reverse bootstrap init init
+    - name: Restore bashrc
       shell: bash
       run: |
-        "$MAMBA_EXE" shell init --reverse bash
+        mv $HOME/.bashrc.premm $HOME/.bashrc
 
     - name: ⚒ Initialize Conda
       id: conda-init
