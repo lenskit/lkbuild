@@ -5,6 +5,10 @@ inputs:
     description: 'Python version to install'
     required: true
     default: '3.9'
+  activate-environment:
+    description: 'Create and activate the specified Conda environment name'
+    required: true
+    default: lktest
 outputs:
   environment-file:
     description: "The environment file created by the lock stage"
@@ -12,7 +16,8 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Add Conda binaries to environment path
+    - name: 🔎 Add Conda binaries to environment path
+      id: path
       shell: bash
       run: |
         if [ ${{runner.os}} == 'windows' ]; then
@@ -21,15 +26,24 @@ runs:
           echo "$CONDA/condabin" >>$GITHUB_PATH
         fi
 
-    - name: 👢 Create boostrap environment
+    - name: 👢 Create bootsrap environment
+      id: bootstrap
       shell: bash
       run: |
         conda env create -n lkboot -f boot-env.yml
 
     - name: 🔒 Prepare Conda environment spec
-      shell: bash
       id: conda-lock
+      shell: bash
       run: |
         conda run -n lkboot --no-capture-output lkbuild dev-lock -v $PYVER --gh-set-output
       env:
-        PYVER: ${{ python-version }}
+        PYVER: ${{ inputs.python-version }}
+
+    - name: ⚒ Initialize Conda
+      id: conda-init
+      uses: conda-incubator/setup-miniconda@v2
+      if: inputs.activate-environment
+      with:
+        activate-environment: ${{ inputs.activate-environment }}
+        environment-file: ${{steps.conda-lock.outputs.environment-file}}
