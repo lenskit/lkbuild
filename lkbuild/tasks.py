@@ -36,9 +36,12 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
     if not spec_dir.exists():
         raise RuntimeError('spec dir not found, is lkbuild installed correctly?')
 
-    cmd = f'conda-lock lock --mamba {plat_opt} -k explicit --dev-dependencies -f pyproject.toml'
+    cmd = f'conda-lock lock --mamba {plat_opt} --dev-dependencies'
     if env_file:
         cmd += ' -k env'
+    else:
+        cmd += ' -k explicit'
+    cmd += ' -f pyproject.toml'
 
     if version:
         sf = spec_dir / f'python-{version}-spec.yml'
