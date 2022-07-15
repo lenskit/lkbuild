@@ -1,0 +1,16 @@
+*.log
+*.pdb
+
+__pycache__/
+.ipynb_checkpoints/
+.idea/
+.vs/
+
+.eggs/
+.*_cache/
+.vscode/
+*.egg-info/
+build/
+dist/
+
+.DS_Store
