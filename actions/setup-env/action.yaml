@@ -30,7 +30,7 @@ runs:
       id: bootstrap
       shell: bash
       run: |
-        conda env create -n lkboot -f boot-env.yml
+        conda env create -n lkboot -f ../../boot-env.yml
 
     - name: 🔒 Prepare Conda environment spec
       id: conda-lock
