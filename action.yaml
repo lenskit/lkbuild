@@ -1,0 +1,35 @@
+name: 'Bootstrap LensKit Build Environment'
+description: 'Bootstraps a Conda-based buil environment for LensKit CI.'
+inputs:
+  python-version:
+    description: 'Python version to install'
+    required: true
+    default: '3.9'
+outputs:
+  environment-file:
+    description: "The environment file created by the lock stage"
+    value: ${{ steps.conda-lock.outputs.environment-file }}
+runs:
+  using: "composite"
+  steps:
+    - name: Add Conda binaries to environment path
+      shell: bash
+      run: |
+        if [ ${{runner.os}} == 'windows' ]; then
+          echo "$CONDA\\condabin" >>$GITHUB_PATH
+        else
+          echo "$CONDA/condabin" >>$GITHUB_PATH
+        fi
+
+    - name: 👢 Create boostrap environment
+      shell: bash
+      run: |
+        conda env create -n lkboot -f boot-env.yml
+
+    - name: 🔒 Prepare Conda environment spec
+      shell: bash
+      id: conda-lock
+      run: |
+        conda run -n lkboot --no-capture-output lkbuild dev-lock -v $PYVER --gh-set-output
+      env:
+        PYVER: ${{ python-version }}
