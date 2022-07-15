@@ -58,7 +58,11 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
     c.run(cmd)
 
     if gh_set:
-        print(f'::set-output name=environment-file::conda-{plat}.lock')
+        if env_file:
+            fn = 'conda-{plat}.lock.yml'
+        else:
+            fn = 'conda-{plat}.lock'
+        print(f'::set-output name=environment-file::{fn}')
 
 
 @task(iterable=['extras'])
