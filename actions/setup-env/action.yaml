@@ -32,14 +32,14 @@ runs:
 
     - name: 🔒 Prepare Conda environment spec
       id: conda-lock
-      shell: bash
+      shell: bash -l {0}
       run: |
         lkbuild dev-lock -v $PYVER --gh-set-output
       env:
         PYVER: ${{ inputs.python-version }}
 
     - name: Reverse bootstrap init init
-      shell: bash
+      shell: bash -l {0}
       run: |
         mamba shell init --reverse bash
 
