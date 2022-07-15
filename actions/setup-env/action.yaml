@@ -34,9 +34,14 @@ runs:
       id: conda-lock
       shell: bash
       run: |
-        conda run -n lkboot --no-capture-output lkbuild dev-lock -v $PYVER --gh-set-output
+        lkbuild dev-lock -v $PYVER --gh-set-output
       env:
         PYVER: ${{ inputs.python-version }}
+
+    - name: Reverse bootstrap init init
+      shell: bash
+      run: |
+        mamba shell init --reverse bash
 
     - name: ⚒ Initialize Conda
       id: conda-init
