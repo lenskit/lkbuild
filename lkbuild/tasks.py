@@ -31,7 +31,7 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
         plat_opt = f'-p {platform}'
     else:
         plat_opt = f'-p {plat}'
-    
+
     spec_dir = Path(__file__).parent / 'specs'
     if not spec_dir.exists():
         raise RuntimeError('spec dir not found, is lkbuild installed correctly?')
@@ -59,9 +59,9 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
 
     if gh_set:
         if env_file:
-            fn = 'conda-{plat}.lock.yml'
+            fn = f'conda-{plat}.lock.yml'
         else:
-            fn = 'conda-{plat}.lock'
+            fn = f'conda-{plat}.lock'
         print(f'::set-output name=environment-file::{fn}')
 
 
@@ -75,11 +75,11 @@ def env_file(c, platform=None, extras=None, version=None, blas=None, dev_deps=Tr
         platform = env.conda_platform()
 
     files = [Path('pyproject.toml')]
-    
+
     spec_dir = Path(__file__).parent / 'specs'
     if not spec_dir.exists():
         raise RuntimeError('spec dir not found, is lkbuild installed correctly?')
-    
+
     if version:
         files.append(spec_dir / f'python-{version}-spec.yml')
     if blas:
