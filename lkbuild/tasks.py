@@ -33,6 +33,9 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
     else:
         plat_opt = f'-p {plat}'
 
+    build_dir = Path('build')
+    build_dir.mkdir(exist_ok=True)
+
     spec_dir = Path(__file__).parent / 'specs'
     if not spec_dir.exists():
         raise RuntimeError('spec dir not found, is lkbuild installed correctly?')
@@ -45,11 +48,17 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
     cmd += ' -f pyproject.toml'
 
     if version:
-        sf = spec_dir / f'python-{version}-spec.yml'
-        cmd += ' -f ' + fspath(sf)
+        fn = f'python-{version}-spec.yml'
+        sf = spec_dir / fn
+        bf = build_dir / fn
+        bf.write_bytes(sf.read_bytes)
+        cmd += ' -f ' + fspath(bf)
     if blas:
-        sf = spec_dir / f'{blas}-spec.yml'
-        cmd += ' -f ' + fspath(sf)
+        fn = f'{blas}-spec.yml'
+        sf = spec_dir / fn
+        bf = build_dir / fn
+        bf.write_bytes(sf.read_bytes)
+        cmd += ' -f ' + fspath(bf)
     for m in mixins:
         cmd += f' -f {m}'
     for e in extras:
