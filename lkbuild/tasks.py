@@ -51,13 +51,13 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
         fn = f'python-{version}-spec.yml'
         sf = spec_dir / fn
         bf = build_dir / fn
-        bf.write_bytes(sf.read_bytes)
+        bf.write_bytes(sf.read_bytes())
         cmd += ' -f ' + fspath(bf)
     if blas:
         fn = f'{blas}-spec.yml'
         sf = spec_dir / fn
         bf = build_dir / fn
-        bf.write_bytes(sf.read_bytes)
+        bf.write_bytes(sf.read_bytes())
         cmd += ' -f ' + fspath(bf)
     for m in mixins:
         cmd += f' -f {m}'
