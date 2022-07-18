@@ -1,0 +1,40 @@
+name: 'Bootstrap LensKit Vanilla Environment'
+description: 'Bootstraps a vanilla Python build environment for LensKit CI.'
+
+inputs:
+  python-version:
+    description: 'Python version to install'
+    required: true
+    default: '3.9'
+
+  extras:
+    description: 'Extras to include in the installed dependencies, in addition to dev dependencies'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{matrix.python}}
+        architecture: x64
+
+    - name: Set up Python build deps
+      shell: bash
+      env:
+        PIP_PREFER_BINARY: 'true'
+      run: |
+        python -m pip install -U flit wheel
+
+    - name: Install package and dependencies
+      shell: bash
+      env:
+        PIP_PREFER_BINARY: 'true'
+      run: |
+        extras="test,dev"
+        for e in $(echo "${{inputs.extras}}" | sed -e 's/,/ /'); do
+          extras="$extras,$e"
+        fi
+        echo "installing with extras $extras"
+        python -m pip install ".[$extras]"
