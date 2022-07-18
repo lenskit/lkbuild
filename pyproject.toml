@@ -9,7 +9,7 @@ authors = [
 ]
 readme = "README.md"
 license = { file = "LICENSE.md" }
-requires-python = ">= 3.8"
+requires-python = ">= 3.7"
 dynamic = ['version', 'description']
 dependencies = [
     "flit >=3.2,<4",
