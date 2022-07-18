@@ -9,6 +9,12 @@ inputs:
     description: 'Create and activate the specified Conda environment name'
     required: true
     default: lktest
+  blas-implementation:
+    description: 'BLAS implementation to activate'
+    required: false
+  extras:
+    description: 'Extras to include in the Conda environment, in addition to dev dependencies'
+    required: false
 outputs:
   environment-file:
     description: "The environment file created by the lock stage"
@@ -41,9 +47,20 @@ runs:
       id: conda-lock
       shell: bash -l {0}
       run: |
-        lkbuild dev-lock -v $PYVER --gh-set-output
+        e_opts=
+        if [ -n "$BLAS_IMPL" ]; then
+          e_opts="$e_opts -b $BLAS_IMPL"
+        fi
+        if [ -n "$EXTRAS" ]; then
+          for extra in $(echo "$EXTRAS" |sed -e 's/,/ /'); do
+            e_opts="$e_opts -e $extra"
+          done
+        fi
+        lkbuild dev-lock -v $PYVER $e_opts --gh-set-output
       env:
+        EXTRAS: ${{ inputs.extras }}
         PYVER: ${{ inputs.python-version }}
+        BLAS_IMPL: ${{ inputs.blas-implementation }}
 
     - name: Restore bashrc
       shell: bash
