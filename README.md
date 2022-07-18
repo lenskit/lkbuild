@@ -1,6 +1,7 @@
 # LensKit build support code
 
-This repository provides support code for use in LensKit builds and development.
+This repository provides support code for use in LensKit builds and development.  If you are trying to
+use LensKit, you don't need it; it is only used for working on developing LensKit (and related packages).
 
 To set up a Conda environment that contains the utilities needed to bootstrap a LensKit
 development environment:
@@ -20,6 +21,7 @@ Or you can download some testing data:
 
     lkbuild fetch-data -d ml-20m
 
-You can also install into a Python environment with:
+You can also install into a Python environment with one of:
 
-    lenskit-build-helpers
+    pip install lenskit-build-helpers
+    conda install -c lenskit lenskit-build-helpers
