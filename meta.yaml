@@ -10,7 +10,7 @@ build:
   string: {{ GIT_BUILD_STR }}
   noarch: python
   script: |
-    flit install --no-deps
+    flit install --deps=none
   entry_points:
     - lkbuild = lkbuild:lkbuild_main
 
