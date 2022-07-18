@@ -1,5 +1,5 @@
 name: 'Bootstrap LensKit Conda Environment'
-description: 'Bootstraps a Conda-based buil environment for LensKit CI.'
+description: 'Bootstraps a Conda-based build environment for LensKit CI.'
 inputs:
   python-version:
     description: 'Python version to install'
@@ -15,6 +15,10 @@ inputs:
   extras:
     description: 'Extras to include in the Conda environment, in addition to dev dependencies'
     required: false
+  cache-number:
+    description: 'Extra cache key for Conda download cache, increment to reset cache.'
+    required: false
+    default: '0'
 outputs:
   environment-file:
     description: "The environment file created by the lock stage"
@@ -42,6 +46,7 @@ runs:
       with:
         environment-name: lkboot
         environment-file: boot-env.yml
+        cache-env: true
 
     - name: 🔒 Prepare Conda environment spec
       id: conda-lock
@@ -70,6 +75,13 @@ runs:
         else
           rm "$HOME/.bash_profile"
         fi
+
+    - name: Cache Conda package downloads based on lock file
+      uses: actions/cache@v2
+      with:
+        path: ~/conda_pkgs_dir
+        key:
+          conda-${{ inputs.cache-number }}-${{ hashFiles(steps.conda-lock.outputs-environment-file) }}
 
     - name: ⚒ Initialize Conda
       id: conda-init
