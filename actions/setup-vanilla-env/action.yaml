@@ -11,6 +11,11 @@ inputs:
     description: 'Extras to include in the installed dependencies, in addition to dev dependencies'
     required: false
 
+  install-package:
+    description: 'Install the package and its dependencies (on by default)'
+    required: false
+    default: true
+
 runs:
   using: "composite"
   steps:
@@ -28,6 +33,7 @@ runs:
         python -m pip install -U flit wheel
 
     - name: Install package and dependencies
+      if: inputs.install-package
       shell: bash
       env:
         PIP_PREFER_BINARY: 'true'
