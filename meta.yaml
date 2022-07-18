@@ -3,12 +3,16 @@ package:
   version: {{ GIT_DESCRIBE_TAG }}
 
 source:
-  path: .  
+  path: .
 
 build:
   number: {{ GIT_DESCRIBE_NUMBER }}
   string: {{ GIT_BUILD_STR }}
   noarch: python
+  script: |
+    flit install --no-deps
+  entry_points:
+    - lkbuild = lkbuild:lkbuild_main
 
 requirements:
   build:

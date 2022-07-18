@@ -25,3 +25,9 @@ You can also install into a Python environment with one of:
 
     pip install lenskit-build-helpers
     conda install -c lenskit lenskit-build-helpers
+
+## GitHub Actions
+
+This repository also provides some GitHub actions to support our CI workflow.
+
+- `actions/setup-env` — sets up an Anaconda environment based on locking the dependencies from `pyproject.toml`.
