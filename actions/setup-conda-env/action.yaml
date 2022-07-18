@@ -48,7 +48,7 @@ runs:
       with:
         environment-name: lkboot
         environment-file: boot-env.yml
-        cache-env: true
+        # cache-env: true
 
     - name: 🔒 Prepare Conda environment spec
       id: conda-lock
