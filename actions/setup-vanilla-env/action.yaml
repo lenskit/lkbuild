@@ -41,6 +41,6 @@ runs:
         extras="test,dev"
         for e in $(echo "${{inputs.extras}}" | sed -e 's/,/ /'); do
           extras="$extras,$e"
-        fi
+        done
         echo "installing with extras $extras"
         python -m pip install ".[$extras]"
