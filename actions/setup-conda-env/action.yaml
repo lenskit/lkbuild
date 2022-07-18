@@ -1,4 +1,4 @@
-name: 'Bootstrap LensKit Build Environment'
+name: 'Bootstrap LensKit Conda Environment'
 description: 'Bootstraps a Conda-based buil environment for LensKit CI.'
 inputs:
   python-version:
