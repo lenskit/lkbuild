@@ -15,6 +15,9 @@ inputs:
   extras:
     description: 'Extras to include in the Conda environment, in addition to dev dependencies'
     required: false
+  mixin:
+    description: 'A mixin YAML file to include in the environment'
+    required: false
   cache-number:
     description: 'Extra cache key for Conda download cache, increment to reset cache.'
     required: false
@@ -61,6 +64,12 @@ runs:
             e_opts="$e_opts -e $extra"
           done
         fi
+
+        if [ -n "${{inputs.mixin}}" ]; then
+          e_opts="$e_opts -m ${{inputs.mixin}}"
+        fi
+
+        echo "extra options: $e_opts"
         lkbuild dev-lock -v $PYVER $e_opts --gh-set-output
       env:
         EXTRAS: ${{ inputs.extras }}
