@@ -16,6 +16,11 @@ inputs:
     required: false
     default: true
 
+  preinstall-helpers:
+    description: 'Install lenskit-build-helpersf rom Git'
+    required: false
+    default: true
+
 runs:
   using: "composite"
   steps:
@@ -31,6 +36,12 @@ runs:
         PIP_PREFER_BINARY: 'true'
       run: |
         python -m pip install -U flit wheel
+
+    - name: Preinstalling LensKit build helpers from Git
+      if: inputs.preinstall-helpers
+      shell: bash
+      run: |
+        python -m pip install git+https://github.com/lenskit/lkbuild.git
 
     - name: Install package and dependencies
       if: inputs.install-package
