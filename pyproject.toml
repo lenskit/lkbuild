@@ -26,4 +26,6 @@ lkbuild = "lkbuild:lkbuild_main"
 name = "lkbuild"
 
 [tool.flit.sdist]
-exclude = "actions/"
+exclude = [
+    "actions/"
+]
