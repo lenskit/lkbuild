@@ -65,7 +65,7 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
         cmd += f' -e {e}'
 
     if filter_extras:
-        cmd += '--filter-extras'
+        cmd += ' --filter-extras'
 
     print('running', cmd, file=sys.stderr)
     c.run(cmd)
