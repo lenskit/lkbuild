@@ -84,13 +84,6 @@ runs:
           rm "$HOME/.bash_profile"
         fi
 
-    - name: Cache Conda package downloads based on lock file
-      uses: actions/cache@v2
-      with:
-        path: ~/conda_pkgs_dir
-        key:
-          conda-${{ inputs.cache-number }}-${{ hashFiles(steps.conda-lock.outputs-environment-file) }}
-
     - name: ⚒ Initialize Conda
       id: conda-init
       uses: conda-incubator/setup-miniconda@v2
