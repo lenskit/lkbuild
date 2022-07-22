@@ -53,7 +53,7 @@ runs:
         python -m pip install git+https://github.com/lenskit/lkbuild.git
 
     - name: Install package and dependencies
-      if: inputs.install-with == "flit"
+      if: inputs.install-with == 'pip'
       shell: bash
       env:
         PIP_PREFER_BINARY: 'true'
@@ -78,7 +78,7 @@ runs:
         python -m pip install $opts ".[$extras]"
 
     - name: Install package and dependencies
-      if: inputs.install-with == "flit"
+      if: inputs.install-with == 'flit'
       shell: bash
       env:
         PIP_PREFER_BINARY: 'true'
