@@ -11,6 +11,15 @@ inputs:
     description: 'Extras to include in the installed dependencies, in addition to dev dependencies'
     required: false
 
+  include-dev-dependencies:
+    description: 'Include the development dependencies (dev & test extras)'
+    required: false
+    default: true
+
+  constraints-file:
+    description: "Constraints file for Pip resolution"
+    required: false
+
   install-package:
     description: 'Install the package and its dependencies (on by default)'
     required: false
@@ -49,9 +58,21 @@ runs:
       env:
         PIP_PREFER_BINARY: 'true'
       run: |
-        extras="test,dev"
+        if [ X"${{inputs.include-dev-dependencies}}" = Xtrue ]; then
+          extras="test,dev"
+        else
+          extras=""
+        fi
         for e in $(echo "${{inputs.extras}}" | sed -e 's/,/ /'); do
-          extras="$extras,$e"
+          if [ -z "$extras" ]; then
+            extras="$e"
+          else
+            extras="$extras,$e"
+          fi
         done
+        opts=""
+        if [ -n "${{inputs.constraints-file}}" ]; then
+          opts="$opts -c ${{inputs.constraints-file}}"
+        fi
         echo "installing with extras $extras"
-        python -m pip install ".[$extras]"
+        python -m pip install $opts ".[$extras]"
