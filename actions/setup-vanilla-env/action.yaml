@@ -83,7 +83,7 @@ runs:
       env:
         PIP_PREFER_BINARY: 'true'
       run: |
-        if [ X"${{inputs.include-dev-dependencies}}" == Xtrue ]; then
+        if [ X"${{inputs.include-dev-dependencies}}" = Xtrue ]; then
           dep_arg="--deps=develop"
         else
           dep_arg="--deps=production"
