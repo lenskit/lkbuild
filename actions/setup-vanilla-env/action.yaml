@@ -83,8 +83,10 @@ runs:
       env:
         PIP_PREFER_BINARY: 'true'
       run: |
-        if [ X"${{inputs.include-dev-dependencies}}" != Xtrue ]; then
-          dep_arg="--deps production"
+        if [ X"${{inputs.include-dev-dependencies}}" == Xtrue ]; then
+          dep_arg="--deps=develop"
+        else
+          dep_arg="--deps=production"
         fi
         if [ -n "${{inputs.extras}}" ]; then
           exlist=$(echo "${{inputs.extras}}" |sed -e 's/ /,/g')
