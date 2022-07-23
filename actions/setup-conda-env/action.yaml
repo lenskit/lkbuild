@@ -59,7 +59,7 @@ runs:
           e_opts="$e_opts -b $BLAS_IMPL"
         fi
         if [ -n "$EXTRAS" ]; then
-          for extra in $(echo "$EXTRAS" |sed -e 's/,/ /'); do
+          for extra in $(echo "$EXTRAS" |sed -e 's/,/ /g'); do
             e_opts="$e_opts -e $extra"
           done
         fi
