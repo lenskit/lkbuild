@@ -81,6 +81,7 @@ runs:
 
     - name: Restore bashrc
       shell: bash
+      if: inputs.conda-type != 'micromamba'  # micromamba reuses current init
       run: |
         if [ -f "$HOME/.bash_profile.premm" ]; then
           mv $HOME/.bash_profile.premm $HOME/.bash_profile
