@@ -33,28 +33,23 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Copy bootstrap environment
-      shell: bash
-      run: |
-        cp -v "$ACTPATH/../../boot-env.yml" boot-env.yml
-      env:
-        ACTPATH: ${{ github.action_path }}
+    - name: Extract Conda platform
+      id: info
+      shell: pwsh
+      run: ${{ github.action_path }}/conda-platform.ps1
 
-    - name: Backup bashrc
-      shell: bash
-      run: |
-        if [ -f "$HOME/.bash_profile" ]; then
-          cp $HOME/.bash_profile $HOME/.bash_profile.premm
-        fi
-
-    - name: 👢 Create bootstrap environment
+    - name: Create bootstrap environment
       uses: mamba-org/provision-with-micromamba@main
       with:
         environment-name: lkboot
-        environment-file: boot-env.yml
+        environment-file: ${{ github.action_path }}/conda-${{ steps.info.outputs.platform }}.lock
         cache-env: true
 
-    - name: 🔒 Prepare Conda environment spec
+    - name: Install current build tools
+      shell: bash -l {0}
+      run: python -m pip install git+https://github.com/lenskit/lkbuild.git
+
+    - name: Prepare Conda environment spec
       id: conda-lock
       shell: bash -l {0}
       run: |
