@@ -29,3 +29,12 @@ name = "lkbuild"
 exclude = [
     "actions/"
 ]
+
+[tool.conda-lock]
+channels = [
+    "conda-forge",
+]
+
+[tool.conda-lock.dependencies]
+python = "=3.10"
+mamba = "*"
