@@ -33,10 +33,12 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Extract Conda platform
+    - name: Obtain boot lock file
       id: info
       shell: pwsh
-      run: ${{ github.action_path }}/conda-platform.ps1
+      run: $env:ACTION_PATH/conda-platform.ps1
+      env:
+        ACTION_PATH: ${{ github.action_path }}
 
     - name: Back up bashrc
       shell: bash
@@ -50,7 +52,7 @@ runs:
       uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: lkboot
-        environment-file: ${{ github.action_path }}/conda-${{ steps.info.outputs.platform }}.lock
+        environment-file: ${{ steps.info.outputs.lock-file }}
 
     - name: Install current build tools
       shell: bash -l {0}

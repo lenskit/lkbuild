@@ -18,3 +18,10 @@ $plat = $info.platform
 
 # Extract platform and write it
 Write-Host "::set-output name=platform::$plat"
+
+# Copy boot file
+if ($env:ACTION_PATH) {
+    $lockfile = (Join-Path $env:ACTION_PATH "conda-$plat.lock")
+    Write-Host "::set-output name=lock-file::bootstrap-$plat.lock"
+    Copy-Item -Force $lockfile "bootstrap-$plat.lock"
+}
