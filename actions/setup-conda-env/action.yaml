@@ -38,12 +38,19 @@ runs:
       shell: pwsh
       run: ${{ github.action_path }}/conda-platform.ps1
 
+    - name: Back up bashrc
+      shell: bash
+      # if: inputs.conda-type != 'micromamba'  # micromamba reuses current init
+      run: |
+        if [ -f "$HOME/.bash_profile" ]; then
+          cp "$HOME/.bash_profile" "$HOME/.bash_profile.preboot"
+        fi
+
     - name: Create bootstrap environment
-      uses: mamba-org/provision-with-micromamba@main
+      uses: conda-incubator/setup-miniconda@v2
       with:
-        environment-name: lkboot
+        activate-environment: lkboot
         environment-file: ${{ github.action_path }}/conda-${{ steps.info.outputs.platform }}.lock
-        cache-env: true
 
     - name: Install current build tools
       shell: bash -l {0}
@@ -76,10 +83,10 @@ runs:
 
     - name: Restore bashrc
       shell: bash
-      if: inputs.conda-type != 'micromamba'  # micromamba reuses current init
+      # if: inputs.conda-type != 'micromamba'  # micromamba reuses current init
       run: |
-        if [ -f "$HOME/.bash_profile.premm" ]; then
-          mv $HOME/.bash_profile.premm $HOME/.bash_profile
+        if [ -f "$HOME/.bash_profile.preboot" ]; then
+          mv $HOME/.bash_profile.preboot $HOME/.bash_profile
         else
           rm "$HOME/.bash_profile"
         fi
