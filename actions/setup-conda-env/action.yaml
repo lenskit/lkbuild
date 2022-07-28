@@ -36,7 +36,7 @@ runs:
     - name: Obtain boot lock file
       id: info
       shell: pwsh
-      run: $env:ACTION_PATH/conda-platform.ps1
+      run: ${{ github.action_path }}/conda-platform.ps1
       env:
         ACTION_PATH: ${{ github.action_path }}
 
