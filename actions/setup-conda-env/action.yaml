@@ -96,16 +96,16 @@ runs:
     - name: ⚒ Initialize Conda environment
       id: conda-init
       uses: conda-incubator/setup-miniconda@v2
-      if: inputs.activate-environment && inputs.conda-type == 'conda'
+      # if: inputs.activate-environment && inputs.conda-type == 'conda'
       with:
         activate-environment: ${{ inputs.activate-environment }}
         environment-file: ${{steps.conda-lock.outputs.environment-file}}
 
-    - name: Initialze Micromamba environment
-      id: mm-init
-      uses: mamba-org/provision-with-micromamba@main
-      if: inputs.activate-environment && inputs.conda-type == 'micromamba'
-      with:
-        environment-name: ${{ inputs.activate-environment }}
-        environment-file: ${{ steps.conda-lock.outputs.environment-file }}
-        cache-env: true
+    # - name: Initialze Micromamba environment
+    #   id: mm-init
+    #   uses: mamba-org/provision-with-micromamba@main
+    #   if: inputs.activate-environment && inputs.conda-type == 'micromamba'
+    #   with:
+    #     environment-name: ${{ inputs.activate-environment }}
+    #     environment-file: ${{ steps.conda-lock.outputs.environment-file }}
+    #     cache-env: true
