@@ -22,16 +22,9 @@ BIBTEX_FILE = Path('docs/lenskit.bib')
 
 @task(iterable=['extras', 'mixins'])
 def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None, env_file=False,
-             filter_extras=True, gh_set_output=False):
+             filter_extras=True, gh_set_output=False, combined_lock_file=False):
     "Create a development lockfile"
     plat = env.conda_platform()
-
-    if platform == 'all':
-        plat_opt = ''
-    elif platform:
-        plat_opt = f'-p {platform}'
-    else:
-        plat_opt = f'-p {plat}'
 
     build_dir = Path('build')
     build_dir.mkdir(exist_ok=True)
@@ -40,12 +33,16 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
     if not spec_dir.exists():
         raise RuntimeError('spec dir not found, is lkbuild installed correctly?')
 
-    cmd = f'conda-lock lock --mamba {plat_opt} --dev-dependencies'
+    cmd = f'conda-lock lock --mamba --dev-dependencies '
+    if platform and platform != 'all':
+        cmd += f'-p {platform}'
+    elif not combined_lock_file:
+        cmd += f'-p {plat}'
+
     if env_file:
         cmd += ' -k env'
-    else:
+    elif not combined_lock_file:
         cmd += ' -k explicit'
-    cmd += ' -f pyproject.toml'
 
     if version:
         fn = f'python-{version}-spec.yml'
@@ -59,8 +56,12 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
         bf = build_dir / fn
         bf.write_bytes(sf.read_bytes())
         cmd += ' -f ' + fspath(bf)
+
     for m in mixins:
         cmd += f' -f {m}'
+
+    cmd += ' -f pyproject.toml'
+
     for e in extras:
         cmd += f' -e {e}'
 
