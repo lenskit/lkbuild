@@ -26,6 +26,10 @@ inputs:
     description: 'The type of Anaconda installation to use for final provisioning'
     required: false
     default: conda
+  lock-file-type:
+    description: 'The type of environment lock file to create (explicit or yml)'
+    required: false
+    default: explicit
 outputs:
   environment-file:
     description: "The environment file created by the lock stage"
@@ -76,12 +80,17 @@ runs:
           e_opts="$e_opts -m ${{inputs.mixin}}"
         fi
 
+        if [ "$LF_TYPE" = yml ]; then
+          e_opts="$e_opts --env-file"
+        fi
+
         echo "extra options: $e_opts"
         lkbuild dev-lock -v $PYVER $e_opts --gh-set-output
       env:
         EXTRAS: ${{ inputs.extras }}
         PYVER: ${{ inputs.python-version }}
         BLAS_IMPL: ${{ inputs.blas-implementation }}
+        LF_TYPE: ${{ inputs.lock-file-type }}
 
     - name: Restore bashrc
       shell: bash
