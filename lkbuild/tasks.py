@@ -2,7 +2,7 @@
 Support tasks shared across LensKit packages.
 """
 
-from os import fspath
+from os import fspath, environ
 import sys
 from pathlib import Path
 from invoke import task, Program, Collection
@@ -22,7 +22,7 @@ BIBTEX_FILE = Path('docs/lenskit.bib')
 
 @task(iterable=['extras', 'mixins'])
 def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None, env_file=False,
-             filter_extras=True, gh_set_output=False, combined_lock_file=False):
+             filter_extras=True, combined_lock_file=False):
     "Create a development lockfile"
     plat = env.conda_platform()
 
@@ -71,13 +71,16 @@ def dev_lock(c, platform=None, extras=None, version=None, blas=None, mixins=None
     print('running', cmd, file=sys.stderr)
     c.run(cmd)
 
-    if gh_set_output:
-        print(f'::set-output name=platform::{plat}')
-        if env_file:
-            fn = f'conda-{plat}.lock.yml'
-        else:
-            fn = f'conda-{plat}.lock'
-        print(f'::set-output name=environment-file::{fn}')
+    gh_out = environ.get('GITHUB_OUTPUT', None)
+    if gh_out:
+        print('detected github actions, writing output file')
+        with open(gh_out, 'a') as ghof:
+            print(f'platform={plat}', file=ghof)
+            if env_file:
+                fn = f'conda-{plat}.lock.yml'
+            else:
+                fn = f'conda-{plat}.lock'
+            print(f'environment-file={fn}', file=ghof)
 
 
 @task(iterable=['extras'])
