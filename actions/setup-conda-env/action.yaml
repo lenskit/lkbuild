@@ -85,7 +85,7 @@ runs:
         fi
 
         echo "extra options: $e_opts"
-        lkbuild dev-lock -v $PYVER $e_opts --gh-set-output
+        lkbuild dev-lock -v $PYVER $e_opts
       env:
         EXTRAS: ${{ inputs.extras }}
         PYVER: ${{ inputs.python-version }}
