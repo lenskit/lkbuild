@@ -9,6 +9,8 @@ ML_DATASETS = {
     'ml-10m': 'ml-10M100K/ratings.dat',
     'ml-20m': 'ml-20m/ratings.csv',
     'ml-25m': 'ml-25m/ratings.csv',
+    'ml-latest': 'ml-latest/ratings.csv',
+    'ml-latest-small': 'ml-latest-small/ratings.csv',
 }
 
 
