@@ -1,0 +1,23 @@
+name: 'Report Test Results'
+description: 'Processes previously-saved test results and reports them.'
+runs:
+  using: "composite"
+  steps:
+
+  - uses: actions/download-artifact@v2
+    with:
+      path: test-logs
+
+  - name: List log files
+    run: ls -lR test-logs
+
+  - name: Upload coverage
+    uses: codecov/codecov-action@v2
+    with:
+      directory: test-logs/
+
+  - name: Upload all test data
+    uses: actions/upload-artifact@v1
+    with:
+      name: test-outputs
+      path: test-logs

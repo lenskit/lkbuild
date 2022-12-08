@@ -1,0 +1,22 @@
+name: 'Save Test Coverage'
+description: 'Prepares test coverage and log data and saves to an artifact.'
+inputs:
+  artifact-name:
+    description: The name of the test output artifact to create.
+    required: true
+runs:
+  using: "composite"
+  steps:
+
+  - name: Aggreagate Coverage Data
+    shell: bash -l {0}
+    run: |
+      coverage xml
+
+  - name: Upload logs
+    uses: actions/upload-artifact@v2
+    with:
+      name: ${{ inputs.artifact-name }}
+      path: |
+        test*.log
+        coverage.xml
