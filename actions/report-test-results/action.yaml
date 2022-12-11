@@ -9,6 +9,7 @@ runs:
       path: test-logs
 
   - name: List log files
+    shell: bash
     run: ls -lR test-logs
 
   - name: Upload coverage
