@@ -4,7 +4,7 @@ runs:
   using: "composite"
   steps:
 
-  - uses: actions/download-artifact@v2
+  - uses: actions/download-artifact@v3
     with:
       path: test-logs
 
@@ -13,7 +13,7 @@ runs:
     run: ls -lR test-logs
 
   - name: Upload coverage
-    uses: codecov/codecov-action@v2
+    uses: codecov/codecov-action@v3
     with:
       directory: test-logs/
 
