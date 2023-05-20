@@ -7,7 +7,7 @@ dependencies:
 - python=3.10
 - flit=3
 - requests=2
-- invoke=1
+- invoke=2
 - pip
 - conda-lock=1
 - mamba
