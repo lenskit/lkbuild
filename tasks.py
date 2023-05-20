@@ -16,5 +16,6 @@ def update_lockfile(c, use_mamba=True):
 
 @task
 def render_lockfiles(c):
+    "Render explicit lockfiles in setup action"
     tmpl = 'actions/setup-conda-env/conda-{platform}.lock'
     c.run(f'conda-lock render --filename-template={tmpl}')

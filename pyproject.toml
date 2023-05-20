@@ -34,6 +34,12 @@ exclude = [
 channels = [
     "conda-forge",
 ]
+platforms = [
+    "linux-64",
+    "win-64",
+    "osx-64",
+    "osx-arm64",
+]
 
 [tool.conda-lock.dependencies]
 python = "=3.10"
