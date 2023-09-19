@@ -9,7 +9,7 @@ dependencies:
 - requests=2
 - invoke=2
 - pip
-- conda-lock=1
+- conda-lock>=2.2
 - mamba
 - pip:
   - git+https://github.com/lenskit/lkbuild.git
