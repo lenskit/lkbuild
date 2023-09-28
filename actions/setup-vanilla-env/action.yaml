@@ -47,7 +47,7 @@ runs:
         python -m pip install -U flit wheel
 
     - name: Preinstalling LensKit build helpers from Git
-      if: inputs.preinstall-helpers == "true"
+      if: inputs.preinstall-helpers == 'true'
       shell: bash
       run: |
         python -m pip install git+https://github.com/lenskit/lkbuild.git
