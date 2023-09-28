@@ -14,7 +14,7 @@ inputs:
   include-dev-dependencies:
     description: 'Include the development dependencies (dev & test extras)'
     required: false
-    default: true
+    default: "true"
 
   constraints-file:
     description: "Constraints file for Pip resolution"
@@ -23,7 +23,7 @@ inputs:
   preinstall-helpers:
     description: 'Install lenskit-build-helpers from Git'
     required: false
-    default: true
+    default: "true"
 
   install-with:
     description: 'Specify installation method (flit, pip, or none)'
@@ -47,7 +47,7 @@ runs:
         python -m pip install -U flit wheel
 
     - name: Preinstalling LensKit build helpers from Git
-      if: inputs.preinstall-helpers
+      if: inputs.preinstall-helpers == "true"
       shell: bash
       run: |
         python -m pip install git+https://github.com/lenskit/lkbuild.git
