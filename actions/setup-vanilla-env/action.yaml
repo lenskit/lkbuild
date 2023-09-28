@@ -21,7 +21,7 @@ inputs:
     required: false
 
   preinstall-helpers:
-    description: 'Install lenskit-build-helpersf rom Git'
+    description: 'Install lenskit-build-helpers from Git'
     required: false
     default: true
 
