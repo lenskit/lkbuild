@@ -37,35 +37,25 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Obtain boot lock file
-      id: info
-      shell: pwsh
-      run: ${{ github.action_path }}/conda-platform.ps1
-      env:
-        ACTION_PATH: ${{ github.action_path }}
-
-    - name: Back up bashrc
-      shell: bash
-      # if: inputs.conda-type != 'micromamba'  # micromamba reuses current init
-      run: |
-        if [ -f "$HOME/.bash_profile" ]; then
-          cp "$HOME/.bash_profile" "$HOME/.bash_profile.preboot"
-        fi
-
     - name: Create bootstrap environment
-      uses: conda-incubator/setup-miniconda@v2
+      uses: mamba-org/setup-micromamba@v1
       with:
-        activate-environment: lkboot
         environment-file: ${{ steps.info.outputs.lock-file }}
+        environment-name: lkboot
+        cache-downloads: true
+        init-shell: none
 
     - name: Install current build tools
-      shell: bash -l {0}
-      run: python -m pip install git+https://github.com/lenskit/lkbuild.git
+      shell: bash
+      run: |
+        eval "$(micromamba shell activate -s bash lkboot)"
+        python -m pip install git+https://github.com/lenskit/lkbuild.git
 
     - name: Prepare Conda environment spec
       id: conda-lock
-      shell: bash -l {0}
+      shell: bash
       run: |
+        eval "$(micromamba shell activate -s bash lkboot)"
         e_opts=
         if [ -n "$BLAS_IMPL" ]; then
           e_opts="$e_opts -b $BLAS_IMPL"
@@ -92,29 +82,13 @@ runs:
         BLAS_IMPL: ${{ inputs.blas-implementation }}
         LF_TYPE: ${{ inputs.lock-file-type }}
 
-    - name: Restore bashrc
-      shell: bash
-      # if: inputs.conda-type != 'micromamba'  # micromamba reuses current init
-      run: |
-        if [ -f "$HOME/.bash_profile.preboot" ]; then
-          mv $HOME/.bash_profile.preboot $HOME/.bash_profile
-        else
-          rm "$HOME/.bash_profile"
-        fi
-
     - name: ⚒ Initialize Conda environment
       id: conda-init
-      uses: conda-incubator/setup-miniconda@v2
-      # if: inputs.activate-environment && inputs.conda-type == 'conda'
+      uses: mamba-org/setup-micromamba@1
       with:
-        activate-environment: ${{ inputs.activate-environment }}
+        environment-name: ${{ inputs.activate-environment }}
         environment-file: ${{steps.conda-lock.outputs.environment-file}}
-
-    # - name: Initialze Micromamba environment
-    #   id: mm-init
-    #   uses: mamba-org/provision-with-micromamba@main
-    #   if: inputs.activate-environment && inputs.conda-type == 'micromamba'
-    #   with:
-    #     environment-name: ${{ inputs.activate-environment }}
-    #     environment-file: ${{ steps.conda-lock.outputs.environment-file }}
-    #     cache-env: true
+        cache-downloads: true
+        init-shell: >-
+          bash
+          powershell
