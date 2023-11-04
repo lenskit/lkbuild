@@ -84,7 +84,7 @@ runs:
 
     - name: ⚒ Initialize Conda environment
       id: conda-init
-      uses: mamba-org/setup-micromamba@1
+      uses: mamba-org/setup-micromamba@v1
       with:
         environment-name: ${{ inputs.activate-environment }}
         environment-file: ${{steps.conda-lock.outputs.environment-file}}
