@@ -75,7 +75,7 @@ runs:
           opts="$opts -c ${{inputs.constraints-file}}"
         fi
         echo "installing with extras $extras"
-        python -m pip install $opts ".[$extras]"
+        python -m pip install $opts -e ".[$extras]"
 
     - name: Install package and dependencies
       if: inputs.install-with == 'flit'
